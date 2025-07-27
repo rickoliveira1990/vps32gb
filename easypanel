@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Cria volume para os dados do EasyPanel
+docker volume create easypanel-data
+
+# Cria e configura o container do EasyPanel
+docker create --name easypanel \
+  -p 3000:3000 \
+  -v easypanel-data:/root/.easypanel \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --restart=on-failure \
+  ghcr.io/easypanel/easypanel:latest
+
+# Inicia o container
+docker start easypanel
+
+# Mensagem final
+echo ""
+echo "✅ EasyPanel instalado via Docker com sucesso!"
+echo "➡️  Acesse: http://<SEU_IP>:3000"
+echo "📌 Obs: Substitua <SEU_IP> pelo IP público da sua VPS"
